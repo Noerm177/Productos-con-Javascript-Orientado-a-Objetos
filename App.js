@@ -16,18 +16,31 @@ class UI {
                     <strong>Product name</strong>: ${product.name}
                     <strong>Product price</strong>: ${product.price}
                     <strong>Product year</strong>: ${product.year}
+                    <a href="#" class="btn btn-danger" name="delete">Delete</a>
                 </div>
             </div>
        `;
         productList.appendChild(element);
-
+        this.resetForm();
+    }
+    resetForm(){
+        document.getElementById('product-form').reset();
     }
 
-    delProduct() {
-
+    delProduct(element) {
+        if (element.name === 'delete') {
+            element.parentElement.parentElement.parentElement.remove();
+        }
     }
 
-    showMessage() {
+    showMessage(message, cssclass) {
+      const div = document.createElement('div');
+      div.className = "alert alert - ${cssclass}";
+      div.appendChild(document.createTextNode(message));
+      //mostrar en el dom
+      const cointener = document.querySelector('.container');
+      const App = document.querySelector('#App');
+      cointener.insertBefore(div, App);
 
     }
 }
@@ -35,7 +48,7 @@ class UI {
 //Dom Events
 
 document.getElementById('product-form')
-    .addEventListener("submit", function (e) {
+    .addEventListener('submit', function (e) {
         const name = document.getElementById('name').value;
         const price = document.getElementById('price').value;
         const year = document.getElementById('year').value;
@@ -44,6 +57,12 @@ document.getElementById('product-form')
 
         const ui = new UI();
         ui.addProduct(product);
+        ui.showMessage('Agregado','success');
 
         e.preventDefault();
-    })
+    });
+
+document.getElementById('product-list').addEventListener('click', function(e){
+    const ui = new UI();
+    ui.delProduct(e.target);
+});
